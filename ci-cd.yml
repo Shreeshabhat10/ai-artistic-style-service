@@ -1,0 +1,37 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.shreeshabhat10 }}
+        password: ${{ secrets.Bhat@405655 }}
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: urmsandeep/ai-artistic-style-service:latest
+
+    - name: Deploy service with Docker Compose
+      run: |
+        docker-compose down
+        docker-compose up -d
